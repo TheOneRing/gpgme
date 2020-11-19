@@ -26,10 +26,12 @@
 #include "global.h"
 #include "key.h"
 
-#include <sys/types.h> // for size_t, off_t
 #include <cstdio> // FILE
 #include <algorithm>
 #include <memory>
+
+/* System specific typedefs.  */
+@INSERT__TYPEDEFS_FOR_GPGME_H@
 
 namespace GpgME
 {
@@ -106,9 +108,9 @@ public:
     char *fileName() const;
     Error setFileName(const char *name);
 
-    ssize_t read(void *buffer, size_t length);
-    ssize_t write(const void *buffer, size_t length);
-    off_t seek(off_t offset, int whence);
+    gpgme_ssize_t read(void *buffer, size_t length);
+    gpgme_ssize_t write(const void *buffer, size_t length);
+    gpgme_off_t seek(gpgme_off_t offset, int whence);
 
     /* Convenience function to do a seek (0, SEEK_SET).  */
     Error rewind();
