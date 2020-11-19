@@ -40,7 +40,13 @@
 #include <cassert>
 #include <cerrno>
 #include <cstring>
+#ifdef _WIN32
+# include <windows.h>
+# include <io.h>
+#else
 #include <unistd.h>
+#endif
+
 #include <stdlib.h>
 
 static inline gpgme_error_t make_err_from_syserror()

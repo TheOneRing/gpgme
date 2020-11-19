@@ -65,7 +65,11 @@
 #endif
 
 #ifndef QGPGME_DEPRECATED
-#  define QGPGME_DEPRECATED __attribute__ ((__deprecated__))
+#  if WIN32
+#    define QGPGME_DEPRECATED __declspec(deprecated)
+#  else
+#    define QGPGME_DEPRECATED __attribute__ ((__deprecated__))
+#  endif
 #endif
 
 #ifndef QGPGME_DEPRECATED_EXPORT

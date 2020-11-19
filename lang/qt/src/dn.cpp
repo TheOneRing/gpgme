@@ -38,6 +38,10 @@
 
 #include "dn.h"
 
+#ifdef _MSC_VER
+#define strcasecmp _stricmp
+#endif
+
 #include <gpg-error.h>
 
 static const struct {

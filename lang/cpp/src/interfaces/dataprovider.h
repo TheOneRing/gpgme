@@ -26,6 +26,11 @@
 #define __GPGMEPP_INTERFACES_DATAPROVIDER_H__
 
 #include <sys/types.h>
+#ifdef _MSC_VER
+#include <BaseTsd.h> // ssize_t on Windows
+#define ssize_t SSIZE_T
+#endif
+
 
 #include "gpgmepp_export.h"
 

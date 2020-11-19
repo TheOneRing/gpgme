@@ -55,7 +55,11 @@
 #endif
 
 #ifndef GPGMEPP_DEPRECATED
-#  define GPGMEPP_DEPRECATED __attribute__ ((__deprecated__))
+#  ifdef WIN32
+#    define GPGMEPP_DEPRECATED __declspec(deprecated)
+#  else
+#    define GPGMEPP_DEPRECATED __attribute__ ((__deprecated__))
+#  endif
 #endif
 
 #ifndef GPGMEPP_DEPRECATED_EXPORT

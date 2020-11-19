@@ -30,7 +30,7 @@
 #include "gpgmefw.h"
 
 #include <memory>
-#include <sys/time.h>
+#include <ctime>
 
 #include <vector>
 #include <algorithm>

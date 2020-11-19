@@ -62,13 +62,13 @@ unset(_expectedTargets)
 add_library(Gpgmepp SHARED IMPORTED)
 
 set_target_properties(Gpgmepp PROPERTIES
-  IMPORTED_IMPLIB "@resolved_libdir@/libgpgmepp.dll.a"
+  IMPORTED_IMPLIB "@resolved_libdir@/gpgmepp.lib"
   INTERFACE_INCLUDE_DIRECTORIES "@resolved_includedir@/gpgme++;@resolved_includedir@"
-  INTERFACE_LINK_LIBRARIES "pthread;@resolved_libdir@/libgpgme.dll.a;@LIBASSUAN_LIBS@"
-  IMPORTED_LOCATION "@resolved_bindir@/libgpgmepp-6.dll"
+  INTERFACE_LINK_LIBRARIES "@resolved_libdir@/gpgme.lib;@LIBASSUAN_LIBS@"
+  IMPORTED_LOCATION "@resolved_bindir@/gpgmepp.dll"
 )
 list(APPEND _IMPORT_CHECK_TARGETS Gpgmepp )
-list(APPEND _IMPORT_CHECK_FILES_FOR_Gpgmepp "@resolved_libdir@/libgpgmepp.dll.a" "@resolved_bindir@/libgpgmepp-6.dll" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_Gpgmepp "@resolved_bindir@/gpgmepp.dll" "@resolved_libdir@/gpgmepp.lib")
 
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
