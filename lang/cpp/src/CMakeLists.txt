@@ -88,6 +88,7 @@ target_include_directories(gpgmepp
     $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}>
 )
 target_link_libraries(gpgmepp ${GPGME_LIBRARIES})
+target_link_directories(gpgmepp PUBLIC ${GPGME_LIBRARY_DIRS})
 
 parse_lt(LIBGPGMEPP)
 math(EXPR MAJOR "${LIBGPGMEPP_LT_CURRENT}-${LIBGPGMEPP_LT_AGE}")

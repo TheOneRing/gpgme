@@ -15,27 +15,8 @@ set(PACKAGE_VERSION "${FULL_VERSION}")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (WIN32)
-    find_file(GPGME_HEADER gpgme.h REQUIRED)
-    get_filename_component(GPGME_INCLUDE_DIR ${GPGME_HEADER} DIRECTORY)
-    find_library(GPGME_LIB gpgme.lib REQUIRED)
-
-    find_file(ASSUAN_HEADER assuan.h REQUIRED)
-    get_filename_component(ASSUAN_INCLUDE_DIR ${ASSUAN_HEADER} DIRECTORY)
-    find_library(ASSUAN_LIB assuan.lib REQUIRED)
-
-    find_file(GPG_ERROR_HEADER gpg-error.h REQUIRED)
-    get_filename_component(GPG_ERROR_INCLUDE_DIR ${GPG_ERROR_HEADER} DIRECTORY)
-    find_library(GPG_ERROR_LIB gpg-error.lib REQUIRED)
-
-
-    set(GPGME_INCLUDE_DIRS ${GPGME_INCLUDE_DIR} ${ASSUAN_INCLUDE_DIR} ${GPG_ERROR_INCLUDE_DIR})
-    set(GPGME_LIBRARIES ${GPGME_LIB} ${ASSUAN_LIB} ${GPG_ERROR_LIB})
-    set(GPGME_FOUND ON)
-else()
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GPGME REQUIRED gpgme)
-endif()
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GPGME REQUIRED gpgme)
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)
