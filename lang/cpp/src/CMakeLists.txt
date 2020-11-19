@@ -1,3 +1,24 @@
+# Figure out platform dependent typedefs for gpgme.h
+if (WIN32)
+    set(INSERT__TYPEDEFS_FOR_GPGME_H "
+#ifdef _WIN64
+# include <stdint.h>
+  typedef int64_t gpgme_off_t;
+  typedef int64_t gpgme_ssize_t;
+#else /* _WIN32 */
+  typedef long gpgme_off_t;
+  typedef long gpgme_ssize_t;
+#endif /* _WIN32 */")
+else()
+    set(INSERT__TYPEDEFS_FOR_GPGME_H "
+#include <sys/types.h>
+typedef off_t   gpgme_off_t;
+typedef ssize_t gpgme_ssize_t;")
+endif()
+               
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/data.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/data.h @ONLY)
+
 set(gpgmepp_SRCS
     callbacks.cpp
     configuration.cpp
@@ -33,7 +54,7 @@ set(gpgmepp_HEADERS
     callbacks.h
     configuration.h
     context.h
-    data.h
+    ${CMAKE_CURRENT_BINARY_DIR}/data.h
     decryptionresult.h
     defaultassuantransaction.h
     editinteractor.h
@@ -109,6 +130,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfigVersion.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp_version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h)
 
+               
 install(TARGETS gpgmepp
         EXPORT Gpgmepp
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -90,7 +90,7 @@ gpgme_error_t passphrase_callback(void *opaque, const char *uid_hint, const char
             size_t passphrase_length = std::strlen(passphrase);
             size_t written = 0;
             do {
-                ssize_t now_written = gpgme_io_write(fd, passphrase + written, passphrase_length - written);
+                gpgme_ssize_t now_written = gpgme_io_write(fd, passphrase + written, passphrase_length - written);
                 if (now_written < 0) {
                     err = make_err_from_syserror();
                     break;

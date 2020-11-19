@@ -55,9 +55,9 @@ private:
     {
         return true;
     }
-    ssize_t read(void *buffer, size_t bufSize) override;
-    ssize_t write(const void *buffer, size_t bufSize) override;
-    off_t seek(off_t offset, int whence) override;
+    gpgme_ssize_t read(void *buffer, size_t bufSize) override;
+    gpgme_ssize_t write(const void *buffer, size_t bufSize) override;
+    gpgme_off_t seek(gpgme_off_t offset, int whence) override;
     void release() override;
 
 private:
@@ -80,9 +80,9 @@ private:
     // these shall only be accessed through the dataprovider
     // interface, where they're public:
     bool isSupported(Operation) const override;
-    ssize_t read(void *buffer, size_t bufSize) override;
-    ssize_t write(const void *buffer, size_t bufSize) override;
-    off_t seek(off_t offset, int whence) override;
+    gpgme_ssize_t read(void *buffer, size_t bufSize) override;
+    gpgme_ssize_t write(const void *buffer, size_t bufSize) override;
+    gpgme_off_t seek(gpgme_off_t offset, int whence) override;
     void release() override;
 
 private:

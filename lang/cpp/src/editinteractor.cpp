@@ -118,7 +118,7 @@ public:
                     // if there's a result, write it:
                     if (*result) {
                         gpgme_err_set_errno(0);
-                        const ssize_t len = std::strlen(result);
+                        const gpgme_ssize_t len = std::strlen(result);
                         if (writeAll(fd, result, len) != len) {
                             err = Error::fromSystemError();
                             if (ei->debug) {

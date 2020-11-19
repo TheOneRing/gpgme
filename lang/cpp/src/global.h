@@ -31,10 +31,6 @@
 
 #include <iosfwd>
 #include <cstring>
-#ifdef _MSC_VER
-#include <BaseTsd.h> // ssize_t on Windows
-#define ssize_t SSIZE_T
-#endif
 
 namespace GpgME
 {

@@ -65,7 +65,7 @@ QByteArrayDataProvider::QByteArrayDataProvider(const QByteArray &initialData)
 
 QByteArrayDataProvider::~QByteArrayDataProvider() {}
 
-ssize_t QByteArrayDataProvider::read(void *buffer, size_t bufSize)
+gpgme_ssize_t QByteArrayDataProvider::read(void *buffer, size_t bufSize)
 {
 #ifndef NDEBUG
     //qDebug( "QByteArrayDataProvider::read( %p, %d )", buffer, bufSize );
@@ -87,7 +87,7 @@ ssize_t QByteArrayDataProvider::read(void *buffer, size_t bufSize)
     return amount;
 }
 
-ssize_t QByteArrayDataProvider::write(const void *buffer, size_t bufSize)
+gpgme_ssize_t QByteArrayDataProvider::write(const void *buffer, size_t bufSize)
 {
 #ifndef NDEBUG
     //qDebug( "QByteArrayDataProvider::write( %p, %lu )", buffer, static_cast<unsigned long>( bufSize ) );
@@ -112,7 +112,7 @@ ssize_t QByteArrayDataProvider::write(const void *buffer, size_t bufSize)
     return bufSize;
 }
 
-off_t QByteArrayDataProvider::seek(off_t offset, int whence)
+gpgme_off_t QByteArrayDataProvider::seek(gpgme_off_t offset, int whence)
 {
 #ifndef NDEBUG
     //qDebug( "QByteArrayDataProvider::seek( %d, %d )", int(offset), whence );
@@ -130,7 +130,7 @@ off_t QByteArrayDataProvider::seek(off_t offset, int whence)
         break;
     default:
         Error::setSystemError(GPG_ERR_EINVAL);
-        return (off_t) - 1;
+        return (gpgme_off_t) - 1;
     }
     return mOff = newOffset;
 }
@@ -202,7 +202,7 @@ static qint64 blocking_read(const std::shared_ptr<QIODevice> &io, char *buffer, 
     return io->read(buffer, maxSize);
 }
 
-ssize_t QIODeviceDataProvider::read(void *buffer, size_t bufSize)
+gpgme_ssize_t QIODeviceDataProvider::read(void *buffer, size_t bufSize)
 {
 #ifndef NDEBUG
     //qDebug( "QIODeviceDataProvider::read( %p, %lu )", buffer, bufSize );
@@ -221,7 +221,7 @@ ssize_t QIODeviceDataProvider::read(void *buffer, size_t bufSize)
     //workaround: some QIODevices (known example: QProcess) might not return 0 (EOF), but immediately -1 when finished. If no
     //errno is set, gpgme doesn't detect the error and loops forever. So return 0 on the very first -1 in case errno is 0
 
-    ssize_t rc = numRead;
+    gpgme_ssize_t rc = numRead;
     if (numRead < 0 && !Error::hasSystemError()) {
         if (mErrorOccurred) {
             Error::setSystemError(GPG_ERR_EIO);
@@ -235,7 +235,7 @@ ssize_t QIODeviceDataProvider::read(void *buffer, size_t bufSize)
     return rc;
 }
 
-ssize_t QIODeviceDataProvider::write(const void *buffer, size_t bufSize)
+gpgme_ssize_t QIODeviceDataProvider::write(const void *buffer, size_t bufSize)
 {
 #ifndef NDEBUG
     //qDebug( "QIODeviceDataProvider::write( %p, %lu )", buffer, static_cast<unsigned long>( bufSize ) );
@@ -251,14 +251,14 @@ ssize_t QIODeviceDataProvider::write(const void *buffer, size_t bufSize)
     return mIO->write(static_cast<const char *>(buffer), bufSize);
 }
 
-off_t QIODeviceDataProvider::seek(off_t offset, int whence)
+gpgme_off_t QIODeviceDataProvider::seek(gpgme_off_t offset, int whence)
 {
 #ifndef NDEBUG
     //qDebug( "QIODeviceDataProvider::seek( %d, %d )", int(offset), whence );
 #endif
     if (mIO->isSequential()) {
         Error::setSystemError(GPG_ERR_ESPIPE);
-        return (off_t) - 1;
+        return (gpgme_off_t) - 1;
     }
     qint64 newOffset = mIO->pos();
     switch (whence) {
@@ -273,11 +273,11 @@ off_t QIODeviceDataProvider::seek(off_t offset, int whence)
         break;
     default:
         Error::setSystemError(GPG_ERR_EINVAL);
-        return (off_t) - 1;
+        return (gpgme_off_t) - 1;
     }
     if (!mIO->seek(newOffset)) {
         Error::setSystemError(GPG_ERR_EINVAL);
-        return (off_t) - 1;
+        return (gpgme_off_t) - 1;
     }
     return newOffset;
 }

@@ -25,12 +25,7 @@
 #ifndef __GPGMEPP_INTERFACES_DATAPROVIDER_H__
 #define __GPGMEPP_INTERFACES_DATAPROVIDER_H__
 
-#include <sys/types.h>
-#ifdef _MSC_VER
-#include <BaseTsd.h> // ssize_t on Windows
-#define ssize_t SSIZE_T
-#endif
-
+#include "data.h"
 
 #include "gpgmepp_export.h"
 
@@ -49,9 +44,9 @@ public:
     };
     virtual bool isSupported(Operation op) const = 0;
 
-    virtual ssize_t read(void   *buffer, size_t bufSize) = 0;
-    virtual ssize_t write(const void *buffer, size_t bufSize) = 0;
-    virtual off_t seek(off_t offset, int whence) = 0;
+    virtual gpgme_ssize_t read(void   *buffer, size_t bufSize) = 0;
+    virtual gpgme_ssize_t write(const void *buffer, size_t bufSize) = 0;
+    virtual gpgme_off_t seek(gpgme_off_t offset, int whence) = 0;
     virtual void release() = 0;
 };
 
