@@ -77,6 +77,8 @@ set(gpgmepp_interface_HEADERS
 add_definitions(-DBUILDING_GPGMEPP)
 
 add_library(gpgmepp ${gpgmepp_SRCS})
+set_target_properties(gpgmepp PROPERTIES EXPORT_NAME Gpgmepp)
+
 target_include_directories(gpgmepp
     PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -86,6 +88,7 @@ target_include_directories(gpgmepp
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}>
+    $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}/gpgme++>
 )
 target_link_libraries(gpgmepp ${GPGME_LIBRARIES})
 target_link_directories(gpgmepp PUBLIC ${GPGME_LIBRARY_DIRS})
@@ -101,27 +104,21 @@ set_target_properties(gpgmepp PROPERTIES
 file(COPY ${gpgmepp_HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/gpgme++/)
 file(COPY ${gpgmepp_interface_HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/gpgme++/interfaces)
 
-set(resolved_includedir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
-set(resolved_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-set(resolved_bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
-set(libsuffix  ".dll")
-
-if (WIN32)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfig-w32.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake @ONLY)
-else()
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfig.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake @ONLY)
-endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfigVersion.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp_version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h)
 
 install(TARGETS gpgmepp
+        EXPORT Gpgmepp
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+install(EXPORT Gpgmepp
+    FILE GpgmeppConfig.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Gpgmepp
+    )
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/gpgme++
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
@@ -130,6 +127,5 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gpgme++)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Gpgmepp
 )

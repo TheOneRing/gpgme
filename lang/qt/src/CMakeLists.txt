@@ -166,11 +166,13 @@ endforeach()
 add_definitions(-DBUILDING_QGPGME)
 
 add_library(qgpgme ${qgpgme_MOC} ${qgpgme_SRCS})
+set_target_properties(qgpgme PROPERTIES EXPORT_NAME QGpgme)
 target_link_libraries(qgpgme PUBLIC gpgmepp ${GPGME_LIBRARIES} Qt5::Core)
 target_include_directories(qgpgme
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}>
+    $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}/qgpgme>
     PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${GPGME_INCLUDE_DIRS}>
@@ -182,29 +184,20 @@ set_target_properties(qgpgme PROPERTIES
     VERSION "${MAJOR}.${LIBQGPGME_LT_AGE}.${LIBQGPGME_LT_REVISION}"
     SOVERSION "${MAJOR}"
 )
-
-set(resolved_includedir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
-set(LIBASSUAN_LIBS "${CMAKE_INSTALL_PREFIX}/lib/assuan.lib;${CMAKE_INSTALL_PREFIX}/lib/gpg-error.lib")
-set(resolved_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-set(resolved_bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
-set(libsuffix  ".dll")
-
-if (WIN32)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/QGpgmeConfig-w32.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/QGpgmeConfig.cmake @ONLY)
-else()
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/QGpgmeConfig.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/QGpgmeConfig.cmake @ONLY)
-endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/QGpgmeConfigVersion.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/QGpgmeConfigVersion.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qgpgme_version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/qgpgme_version.h)
 
 install(TARGETS qgpgme DESTINATION
+        EXPORT QGpgme
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+install(EXPORT QGpgme
+    FILE QGpgmeConfig.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QGpgme
+    )
 
 install(FILES ${qgpgme_HEADERS}
               ${CMAKE_CURRENT_BINARY_DIR}/qgpgme_version.h
@@ -213,6 +206,5 @@ install(FILES ${qgpgme_HEADERS}
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/QGpgME
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QGpgmeConfigVersion.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/QGpgmeConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QGpgme
 )
