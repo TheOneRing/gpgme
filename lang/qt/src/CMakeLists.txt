@@ -195,7 +195,7 @@ install(TARGETS qgpgme DESTINATION
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 install(EXPORT QGpgme
-    FILE QGpgmeConfig.cmake
+    FILE QGpgmeTargets.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QGpgme
     )
 
@@ -206,5 +206,6 @@ install(FILES ${qgpgme_HEADERS}
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/QGpgME
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QGpgmeConfigVersion.cmake
+        ${CMAKE_CURRENT_SOURCE_DIR}/QGpgmeConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QGpgme
 )
