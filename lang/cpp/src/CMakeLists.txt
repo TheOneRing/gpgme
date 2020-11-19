@@ -90,7 +90,7 @@ target_include_directories(gpgmepp
     $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:${GPGME_INCLUDE_DIRS}/gpgme++>
 )
-target_link_libraries(gpgmepp ${GPGME_LIBRARIES})
+target_link_libraries(gpgmepp PUBLIC ${GPGME_LIBRARIES})
 target_link_directories(gpgmepp PUBLIC ${GPGME_LIBRARY_DIRS})
 
 parse_lt(LIBGPGMEPP)
